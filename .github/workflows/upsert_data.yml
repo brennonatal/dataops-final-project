@@ -1,0 +1,25 @@
+name: Upsert MySql
+
+on: push
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 1
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+      - name: install python packages
+        run: python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: execute py script
+        env:
+          DATABASE_IP: ${{ secrets.DATABASE_IP }}
+          DATABASE_USER: ${{ secrets.DATABASE_USER }}
+          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+        run: python scraping_script.py
